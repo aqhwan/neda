@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart' show runApp;
-import 'app/app.dart' show NedaApp;
+import 'package:flutter/material.dart';
+import 'package:neda/lib.dart';
 
 void main() {
-  runApp(const NedaApp());
+  runApp(NedaApp());
 }
