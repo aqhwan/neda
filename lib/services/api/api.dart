@@ -4,6 +4,7 @@ import 'package:neda/modele/salat.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:time/time.dart';
+import 'package:neda/lib.dart';
 
 typedef Date = DateTime;
 
@@ -121,16 +122,6 @@ class PrayerTimesApiUrlException implements Exception {
 }
 
 enum PrayerTimesTakeMethod { monthly, yearly }
-
-extension DateAsString on Date {
-  String asStringSeparatedByDash() {
-    return [
-      day.toString().padLeft(2, '0'),
-      month.toString().padLeft(2, '0'),
-      year.toString().padLeft(4, '0'),
-    ].join('-');
-  }
-}
 
 extension SalatJson on Salat {
   static Salat fromJson(Map<String, dynamic> json) {

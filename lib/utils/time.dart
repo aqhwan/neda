@@ -20,3 +20,13 @@ extension ForatDuration on Duration {
     }
   }
 }
+
+extension DateTimeAsString on DateTime {
+  String asStringSeparatedByDash() {
+    return [
+      day.toString().padLeft(2, '0'),
+      month.toString().padLeft(2, '0'),
+      year.toString().padLeft(4, '0'),
+    ].join('-');
+  }
+}
