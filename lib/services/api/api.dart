@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:neda/modele/salat.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:sqlite3/sqlite3.dart' show Row;
 import 'package:http/http.dart' as http;
 import 'package:time/time.dart';
 import 'package:neda/lib.dart';
@@ -52,7 +53,7 @@ class PrayerTimesApi {
 
     final json = jsonDecode(response.body);
     for (final day in json['data']) {
-      salatTimes.add(SalatJson.fromJson(day));
+      salatTimes.add(day as Salat);
     }
 
     return salatTimes;
@@ -123,22 +124,20 @@ class PrayerTimesApiUrlException implements Exception {
 
 enum PrayerTimesTakeMethod { monthly, yearly }
 
-extension SalatJson on Salat {
-  static Salat fromJson(Map<String, dynamic> json) {
-    return Salat(
-      date: Date(
-        int.parse(json['date']['gregorian']['year']),
-        json['date']['gregorian']['month']['number'],
-        int.parse(json['date']['gregorian']['day']),
-      ),
-      fajr: SalatTimeJson.parseCETFormat(json['timings']['Fajr']),
-      sunrise: SalatTimeJson.parseCETFormat(json['timings']['Sunrise']),
-      dhuhr: SalatTimeJson.parseCETFormat(json['timings']['Dhuhr']),
-      asr: SalatTimeJson.parseCETFormat(json['timings']['Asr']),
-      maghrib: SalatTimeJson.parseCETFormat(json['timings']['Maghrib']),
-      isha: SalatTimeJson.parseCETFormat(json['timings']['Isha']),
-    );
-  }
+extension SalatFromDB on Row {
+  Salat asSalat() => Salat(
+    date: Date(
+      int.parse(this['date'].toString().split('-').last),
+      int.parse(this['date'].toString().split('-').first),
+      int.parse(this['date'].toString().split('-')[1]),
+    ),
+    fajr: SalatTimeJson.fromString(this['fajr']),
+    sunrise: SalatTimeJson.fromString(this['sunrise']),
+    dhuhr: SalatTimeJson.fromString(this['dhuhr']),
+    asr: SalatTimeJson.fromString(this['asr']),
+    maghrib: SalatTimeJson.fromString(this['maghrib']),
+    isha: SalatTimeJson.fromString(this['isha']),
+  );
 }
 
 extension SalatTimeJson on TimeOfDay {
@@ -148,6 +147,14 @@ extension SalatTimeJson on TimeOfDay {
       minute: int.parse(
         cetFormat.substring(cetFormat.indexOf(':') + 1, cetFormat.indexOf(' ')),
       ),
+    );
+  }
+
+  static TimeOfDay fromString(String cetFormat) {
+    var indexOfColon = cetFormat.indexOf(':');
+    return TimeOfDay(
+      hour: int.parse(cetFormat.substring(0, indexOfColon)),
+      minute: int.parse(cetFormat.substring(indexOfColon + 1)),
     );
   }
 }

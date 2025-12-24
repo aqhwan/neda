@@ -63,7 +63,7 @@ class SalatRepository extends Table {
         .select('SELECT * FROM $name WHERE date = ?', [
           DateTime.now().asStringSeparatedByDash(),
         ])
-        .map((e) => SalatJson.fromJson(e))
+        .map((e) => e.asSalat())
         .first;
 
     return todayPrayerTimes;
