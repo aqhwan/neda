@@ -25,3 +25,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: false
+
+  fonts:
+    - family: MainArabic
+      fonts:
+        - asset: assets/fonts/Lalezar-Regular.ttf
+          weight: 400

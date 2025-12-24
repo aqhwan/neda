@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neda/screens/root/root.dart';
+import 'package:neda/lib.dart';
 
 class NedaApp extends StatelessWidget {
   const NedaApp({super.key});
@@ -7,9 +8,10 @@ class NedaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Neda',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: NedaRoot(),
+      theme: NedaTheme.of(context).data,
+      home: Scaffold(body: NedaRoot()),
     );
   }
 }
