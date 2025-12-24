@@ -6,6 +6,21 @@ extension TimeAsString on TimeOfDay {
   String asString() {
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
+
+  Duration get asDuration => Duration(hours: hour, minutes: minute);
+
+  TimeOfDay operator -(TimeOfDay other) {
+    var decreseHour = other.minute > minute;
+    var otherHour = decreseHour ? other.hour - 1 : other.hour;
+    if (hour >= otherHour) {
+      return TimeOfDay(
+        hour: hour - otherHour,
+        minute: (minute - other.minute) % 60,
+      );
+    }
+
+    return TimeOfDay(hour: 0, minute: 0);
+  }
 }
 
 extension ForatDuration on Duration {
