@@ -17,7 +17,8 @@ class _ClockState extends State<Clock> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          '٤٤د',
+          '٤٤'
+          'د',
           style: TextStyle(
             fontSize: FontSize.large,
             color: Theme.of(context).colorScheme.primary,
