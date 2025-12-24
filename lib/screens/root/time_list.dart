@@ -1,37 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
+import 'package:neda/modele/salat.dart';
+import 'package:provider/provider.dart';
 
 class TimeList extends StatelessWidget {
   const TimeList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    prayerTimeLine(String salatName, TimeOfDay salatTime) => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(salatTime.asString(), style: TextStyle(fontSize: FontSize.medium)),
-        Text(salatName, style: TextStyle(fontSize: FontSize.medium)),
-      ],
-    );
+    var isNextSalatSeted = false;
 
-    return Scrollable(
-      viewportBuilder: (context, offset) {
-        return SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-              prayerTimeLine('فجر', TimeOfDay(hour: 6, minute: 7)),
-            ],
+    prayerTimeLine(String salatName, TimeOfDay salatTime) {
+      bool isNextSalat =
+          !isNextSalatSeted && salatTime.isAfter(TimeOfDay.now());
+
+      if (isNextSalat && !isNextSalatSeted) isNextSalatSeted = true;
+
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            salatTime.asString(),
+            style: TextStyle(fontSize: FontSize.medium),
           ),
-        );
-      },
-    );
+          Text(
+            salatName,
+            style: TextStyle(
+              fontSize: FontSize.medium,
+              color: isNextSalat && isNextSalatSeted
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
+      );
+    }
+
+    Salat? salatTimes = context.watch<SalatTimesProvider>().salatTimes;
+    // salatTimes = null;
+
+    if (salatTimes != null) {
+      return Scrollable(
+        viewportBuilder: (context, offset) {
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                prayerTimeLine('فجر', salatTimes.fajr),
+                prayerTimeLine('شروق', salatTimes.sunrise),
+                prayerTimeLine('ظهر', salatTimes.dhuhr),
+                prayerTimeLine('عصر', salatTimes.asr),
+                prayerTimeLine('مغرب', salatTimes.maghrib),
+                prayerTimeLine('عشاء', salatTimes.isha),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      return Center(
+        widthFactor: 1,
+        child: Text(
+          "أسفاً لا بيانات هنا - حاول الاتصال بالانترنت لتحديث البيانات",
+          style: TextStyle(
+            fontSize: FontSize.small,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
   }
 }

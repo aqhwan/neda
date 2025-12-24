@@ -27,7 +27,7 @@ class NedaTheme {
       surface: const Color(0xff101010),
       surfaceContainerHigh: const Color(0xff262626),
       font: const Color(0xffffffff),
-      error: Colors.red,
+      error: const Color(0xffffffff),
     );
   } // no light theme yet
 
