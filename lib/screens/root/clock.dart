@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
+import 'package:neda/screens/root/error.dart';
 import 'package:provider/provider.dart';
 
 class Clock extends StatefulWidget {
@@ -59,18 +60,7 @@ class _ClockState extends State<Clock> {
   Widget build(BuildContext context) {
     Salat? salatTimes = context.watch<SalatTimesProvider>().salatTimes;
 
-    if (salatTimes == null) {
-      return Center(
-        child: Text(
-          "أسفاً لا بيانات هنا - حاول الاتصال بالانترنت لتحديث البيانات",
-          style: TextStyle(
-            fontSize: FontSize.small,
-            color: Theme.of(context).colorScheme.error,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
+    if (salatTimes == null) return noDataFoundException(context);
 
     final salatTime = _getNextSalat(salatTimes);
 

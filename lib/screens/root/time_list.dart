@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
+import 'package:neda/screens/root/error.dart';
 import 'package:provider/provider.dart';
 
 class TimeList extends StatelessWidget {
@@ -60,17 +61,7 @@ class TimeList extends StatelessWidget {
         },
       );
     } else {
-      return Center(
-        widthFactor: 1,
-        child: Text(
-          "أسفاً لا بيانات هنا - حاول الاتصال بالانترنت لتحديث البيانات",
-          style: TextStyle(
-            fontSize: FontSize.small,
-            color: Theme.of(context).colorScheme.error,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      );
+      return noDataFoundException(context);
     }
   }
 }
