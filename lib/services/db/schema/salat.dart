@@ -1,7 +1,6 @@
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
 import 'package:neda/services/db/core/table.dart';
-import 'package:time/time.dart';
 
 class SalatRepository extends Table {
   SalatRepository.of(super.db)
@@ -26,7 +25,7 @@ class SalatRepository extends Table {
 
   Future<void> overwriteAll(List<Salat> salat) async {
     final currentDataIds = db.conn
-        .select('SELECT id FROM salat')
+        .select('SELECT id FROM $name')
         .map<int>((e) => e['id'])
         .toList();
 
@@ -41,31 +40,37 @@ class SalatRepository extends Table {
         ${columns['isha']!.name}
       ) VALUES (?, ?, ?, ?, ?, ?, ?)''');
 
-    for (final salatTime in salat) {
-      sql.execute([
-        salatTime.date.asStringSeparatedByDash(),
-        salatTime.fajr.asString(),
-        salatTime.sunrise.asString(),
-        salatTime.dhuhr.asString(),
-        salatTime.asr.asString(),
-        salatTime.maghrib.asString(),
-        salatTime.isha.asString(),
-      ]);
-    }
+    var params = salat
+        .map(
+          (salatTime) => [
+            salatTime.date.asStringSeparatedByDash(),
+            salatTime.fajr.asString(),
+            salatTime.sunrise.asString(),
+            salatTime.dhuhr.asString(),
+            salatTime.asr.asString(),
+            salatTime.maghrib.asString(),
+            salatTime.isha.asString(),
+          ],
+        )
+        .toList();
+
+    params.forEach((param) => sql.execute(param));
 
     db.conn.execute(
-      'DELETE FROM $name WHERE id NOT IN (${currentDataIds.join(',')})',
+      'DELETE FROM $name WHERE id IN (${currentDataIds.join(',')})',
     );
   }
 
-  Future<Salat>? getTodayPrayerTimes() async {
+  Future<Salat?> getTodayPrayerTimes() async {
     final todayPrayerTimes = db.conn
         .select('SELECT * FROM $name WHERE date = ?', [
           DateTime.now().asStringSeparatedByDash(),
         ])
         .map((e) => e.asSalat())
-        .first;
+        .toList();
 
-    return todayPrayerTimes;
+    if (todayPrayerTimes.isEmpty) return null;
+
+    return todayPrayerTimes.first;
   }
 }

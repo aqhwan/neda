@@ -53,7 +53,7 @@ class PrayerTimesApi {
 
     final json = jsonDecode(response.body);
     for (final day in json['data']) {
-      salatTimes.add(day as Salat);
+      salatTimes.add((day as Map<String, dynamic>).asSalat());
     }
 
     return salatTimes;
@@ -157,4 +157,20 @@ extension SalatTimeJson on TimeOfDay {
       minute: int.parse(cetFormat.substring(indexOfColon + 1)),
     );
   }
+}
+
+extension SalatFromJson on Map<String, dynamic> {
+  Salat asSalat() => Salat(
+    date: Date(
+      int.parse(this['date']['gregorian']['year']),
+      this['date']['gregorian']['month']['number'],
+      int.parse(this['date']['gregorian']['day']),
+    ),
+    fajr: SalatTimeJson.parseCETFormat(this['timings']['Fajr']),
+    sunrise: SalatTimeJson.parseCETFormat(this['timings']['Sunrise']),
+    dhuhr: SalatTimeJson.parseCETFormat(this['timings']['Dhuhr']),
+    asr: SalatTimeJson.parseCETFormat(this['timings']['Asr']),
+    maghrib: SalatTimeJson.parseCETFormat(this['timings']['Maghrib']),
+    isha: SalatTimeJson.parseCETFormat(this['timings']['Isha']),
+  );
 }
