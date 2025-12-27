@@ -9,7 +9,7 @@ class NedaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Neda',
+      title: 'نداء',
       theme: NedaTheme.of(context).data,
       home: Scaffold(body: NedaRoot()),
     );

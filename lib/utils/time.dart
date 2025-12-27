@@ -11,7 +11,7 @@ extension TimeAsString on TimeOfDay {
 
   TimeOfDay operator -(TimeOfDay other) {
     var decreseHour = other.minute > minute;
-    var otherHour = decreseHour ? other.hour - 1 : other.hour;
+    var otherHour = decreseHour ? other.hour + 1 : other.hour;
     if (hour >= otherHour) {
       return TimeOfDay(
         hour: hour - otherHour,

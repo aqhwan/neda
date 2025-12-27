@@ -1,41 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
-import 'package:neda/modele/salat.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var nedaDB = DB('salat_times', await getApplicationDocumentsDirectory());
-  var salatRepository = SalatRepository.of(nedaDB);
+  final salatProvider = SalatTimesProvider();
+  await salatProvider.setSalatTimes(); // Add await
 
-  var todaySalatTimes = await salatRepository.getTodayPrayerTimes();
-
-  if (todaySalatTimes == null) {
-    var api = PrayerTimesApi(
-      country: 'USK',
-      city: 'mecca',
-    ); // TODO: change to your country and city
-
-    List<Salat>? salatTimes;
-    try {
-      salatTimes = await api.fetchPrayerTimes();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-
-    if (salatTimes != null) {
-      await salatRepository.overwriteAll(salatTimes);
-
-      todaySalatTimes = await salatRepository.getTodayPrayerTimes();
-    }
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {
+      // Log to console or your logging service
+      print('PRODUCTION: $message');
+    };
   }
 
-  final provider = SalatTimesProvider();
-  provider.setSalatTimes(todaySalatTimes);
-
-  runApp(
-    ChangeNotifierProvider(create: (context) => provider, child: NedaApp()),
-  );
+  runApp(ChangeNotifierProvider.value(value: salatProvider, child: NedaApp()));
 }

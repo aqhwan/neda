@@ -64,20 +64,24 @@ class _ClockState extends State<Clock> {
 
     final salatTime = _getNextSalat(salatTimes);
 
-    return Flex(
-      direction: Axis.vertical,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          (salatTime!.$1 - TimeOfDay.now()).asString(),
-          style: TextStyle(
-            fontSize: FontSize.large,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+    return Center(
+      child: SingleChildScrollView(
+        child: Flex(
+          direction: Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              (salatTime!.$1 - TimeOfDay.now()).asString(),
+              style: TextStyle(
+                fontSize: FontSize.large,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            Text(salatTime.$2, style: TextStyle(fontSize: FontSize.huge)),
+          ],
         ),
-        Text(salatTime.$2, style: TextStyle(fontSize: FontSize.huge)),
-      ],
+      ),
     );
   }
 }

@@ -42,23 +42,21 @@ class TimeList extends StatelessWidget {
     // salatTimes = null;
 
     if (salatTimes != null) {
-      return Scrollable(
-        viewportBuilder: (context, offset) {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                prayerTimeLine('فجر', salatTimes.fajr),
-                prayerTimeLine('شروق', salatTimes.sunrise),
-                prayerTimeLine('ظهر', salatTimes.dhuhr),
-                prayerTimeLine('عصر', salatTimes.asr),
-                prayerTimeLine('مغرب', salatTimes.maghrib),
-                prayerTimeLine('عشاء', salatTimes.isha),
-              ],
-            ),
-          );
-        },
+      return Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              prayerTimeLine('فجر', salatTimes.fajr),
+              prayerTimeLine('شروق', salatTimes.sunrise),
+              prayerTimeLine('ظهر', salatTimes.dhuhr),
+              prayerTimeLine('عصر', salatTimes.asr),
+              prayerTimeLine('مغرب', salatTimes.maghrib),
+              prayerTimeLine('عشاء', salatTimes.isha),
+            ],
+          ),
+        ),
       );
     } else {
       return noDataFoundException(context);

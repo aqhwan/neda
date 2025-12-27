@@ -54,7 +54,9 @@ class SalatRepository extends Table {
         )
         .toList();
 
-    params.forEach((param) => sql.execute(param));
+    for (var param in params) {
+      sql.execute(param);
+    }
 
     db.conn.execute(
       'DELETE FROM $name WHERE id IN (${currentDataIds.join(',')})',
