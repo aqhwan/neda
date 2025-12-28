@@ -9,6 +9,6 @@ Widget noDataFoundException(BuildContext context) => Center(
       fontSize: FontSize.small,
       color: Theme.of(context).colorScheme.error,
     ),
-    textAlign: TextAlign.center,
+    textAlign: .center,
   ),
 );

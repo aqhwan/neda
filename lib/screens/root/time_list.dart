@@ -18,8 +18,8 @@ class TimeList extends StatelessWidget {
       if (isNextSalat && !isNextSalatSeted) isNextSalatSeted = true;
 
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: .spaceAround,
+        mainAxisSize: .max,
         children: [
           Text(
             salatTime.asString(),
@@ -45,8 +45,8 @@ class TimeList extends StatelessWidget {
       return Center(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: .center,
+            crossAxisAlignment: .center,
             children: [
               prayerTimeLine('فجر', salatTimes.fajr),
               prayerTimeLine('شروق', salatTimes.sunrise),

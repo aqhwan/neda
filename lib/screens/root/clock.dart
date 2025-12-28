@@ -67,9 +67,9 @@ class _ClockState extends State<Clock> {
     return Center(
       child: SingleChildScrollView(
         child: Flex(
-          direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          direction: .vertical,
+          mainAxisAlignment: .center,
+          crossAxisAlignment: .center,
           children: [
             Text(
               (salatTime!.$1 - TimeOfDay.now()).asString(),

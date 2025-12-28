@@ -81,13 +81,24 @@ class NedaTheme {
       ),
 
       // Card theme
-      cardTheme: CardThemeData(color: surface),
+      cardTheme: .new(color: surface),
 
       // Dialog theme
-      dialogTheme: DialogThemeData(backgroundColor: surface),
+      dialogTheme: .new(backgroundColor: surface),
 
       // Bottom sheet theme
-      bottomSheetTheme: BottomSheetThemeData(backgroundColor: surface),
+      bottomSheetTheme: .new(
+        backgroundColor: surface,
+        showDragHandle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(NedaTheme.mainBorderRadiusSize),
+            topRight: Radius.circular(NedaTheme.mainBorderRadiusSize),
+            bottomLeft: Radius.circular(NedaTheme.mainBorderRadiusSize),
+            bottomRight: Radius.circular(NedaTheme.mainBorderRadiusSize),
+          ),
+        ),
+      ),
 
       // Floating action button
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -104,7 +115,7 @@ class NedaTheme {
       ),
 
       // Text theme (optional - customize fonts)
-      textTheme: TextTheme(
+      textTheme: .new(
         // Your text styles here
       ),
     );

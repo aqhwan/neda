@@ -17,20 +17,20 @@ class NedaRoot extends StatelessWidget {
             right: 20,
           ),
           child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            direction: .vertical,
+            mainAxisAlignment: .center,
+            crossAxisAlignment: .center,
             spacing: 20,
             children: [
               Flexible(
                 flex: 1,
                 child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                  width: .infinity,
+                  height: .infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: .circular(20),
                   ),
                   child: Clock(),
                 ),
@@ -38,12 +38,12 @@ class NedaRoot extends StatelessWidget {
               Flexible(
                 flex: 2,
                 child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
+                  width: .infinity,
+                  height: .infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: .circular(20),
                   ),
                   child: TimeList(),
                 ),
