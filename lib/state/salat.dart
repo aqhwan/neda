@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SalatTimesProvider extends ChangeNotifier {
-  Salat? _salatTimes;
+class SalatTimesCubit extends Cubit<Salat?> {
+  SalatTimesCubit() : super(null);
 
-  Salat? get salatTimes => _salatTimes;
-
-  Future<void> setSalatTimes() async {
+  Future<void> setSalatTimes(Config config) async {
+    var configCubit = ConfigCubit();
+    configCubit.stream.listen((cfg) => print(cfg.oldCountry));
     var nedaDB = DB('salat_times', await getApplicationDocumentsDirectory());
     var salatRepository = SalatRepository.of(nedaDB);
 
     var todaySalatTimes = await salatRepository.getTodayPrayerTimes();
 
-    if (todaySalatTimes == null) {
-      var api = PrayerTimesApi(
-        country: 'USK',
-        city: 'mecca',
-      ); // TODO: change to your country and city
+    if (todaySalatTimes == null ||
+        (config.oldCountry != config.country ||
+            config.oldCity != config.city)) {
+      var api = PrayerTimesApi(country: config.country!, city: config.city!);
 
       List<Salat>? salatTimes;
       try {
@@ -32,9 +32,10 @@ class SalatTimesProvider extends ChangeNotifier {
 
         todaySalatTimes = await salatRepository.getTodayPrayerTimes();
       }
+
+      configCubit.writeConfig(oldCountry: config.country, oldCity: config.city);
     }
 
-    _salatTimes = todaySalatTimes;
-    notifyListeners();
+    emit(todaySalatTimes);
   }
 }

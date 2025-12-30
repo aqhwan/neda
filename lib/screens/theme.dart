@@ -14,6 +14,8 @@ class NedaTheme {
 
   static const double mainBorderRadiusSize = 60;
 
+  static const String fontFamily = 'MainArabic';
+
   ThemeType type;
 
   factory NedaTheme({ThemeType type = defaultThemeType}) {
@@ -72,7 +74,7 @@ class NedaTheme {
       // The main color scheme
       colorScheme: colorScheme,
 
-      fontFamily: 'MainArabic',
+      fontFamily: fontFamily,
 
       // Apply the colors to specific components
       appBarTheme: AppBarTheme(
@@ -83,8 +85,18 @@ class NedaTheme {
       // Card theme
       cardTheme: .new(color: surface),
 
+      listTileTheme: .new(
+        tileColor: surface,
+        titleTextStyle: .new(color: primary, fontFamily: fontFamily),
+        contentPadding: .only(right: 20, left: 20),
+      ),
+
       // Dialog theme
-      dialogTheme: .new(backgroundColor: surface),
+      dialogTheme: .new(
+        backgroundColor: surface,
+        titleTextStyle: TextStyle(color: font, fontFamily: fontFamily),
+        contentTextStyle: TextStyle(color: font, fontFamily: fontFamily),
+      ),
 
       // Bottom sheet theme
       bottomSheetTheme: .new(

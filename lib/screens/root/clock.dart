@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
 import 'package:neda/screens/root/error.dart';
-import 'package:provider/provider.dart';
 
 class Clock extends StatefulWidget {
   const Clock({super.key});
@@ -58,7 +57,7 @@ class _ClockState extends State<Clock> {
 
   @override
   Widget build(BuildContext context) {
-    Salat? salatTimes = context.watch<SalatTimesProvider>().salatTimes;
+    Salat? salatTimes = SalatTimesCubit().state;
 
     if (salatTimes == null) return noDataFoundException(context);
 

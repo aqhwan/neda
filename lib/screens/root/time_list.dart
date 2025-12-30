@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neda/lib.dart';
 import 'package:neda/modele/salat.dart';
-import 'package:neda/screens/root/error.dart';
-import 'package:provider/provider.dart';
+import 'package:neda/screens/lib.dart';
 
 class TimeList extends StatelessWidget {
   const TimeList({super.key});
@@ -38,8 +37,8 @@ class TimeList extends StatelessWidget {
       );
     }
 
-    Salat? salatTimes = context.watch<SalatTimesProvider>().salatTimes;
-    // salatTimes = null;
+    Salat? salatTimes = SalatTimesCubit().state;
+    SalatTimesCubit().stream.listen(print);
 
     if (salatTimes != null) {
       return Center(
