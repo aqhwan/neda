@@ -33,25 +33,25 @@ class ConfigCubit extends Cubit<Config> {
 
     if (country != null) {
       await prefs.setString('country', country);
-      newState.country = prefs.getString('country');
+      newState.country = country;
       emit(newState);
     }
 
     if (city != null) {
       await prefs.setString('city', city);
-      newState.city = prefs.getString('city');
+      newState.city = city;
       emit(newState);
     }
 
     if (oldCountry != null) {
       await prefs.setString('oldCountry', oldCountry);
-      newState.oldCountry = prefs.getString('oldCountry');
+      newState.oldCountry = oldCountry;
       emit(newState);
     }
 
     if (oldCity != null) {
       await prefs.setString('oldCity', oldCity);
-      newState.oldCity = prefs.getString('oldCity');
+      newState.oldCity = oldCity;
       emit(newState);
     }
   }

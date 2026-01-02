@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:country_picker_flutter/country_picker_flutter.dart';
 import 'package:neda/lib.dart';
 
 class NedaBottomSheet extends StatelessWidget {
@@ -53,47 +52,11 @@ class _PlacePickerState extends State<_PlacePicker> {
         Center(
           child: Container(
             padding: const .all(20),
-            child: CountryPicker(
-              showCities: true,
-              flagState: .SHOW_IN_DROP_DOWN_ONLY,
-              showStates: true,
-              cityLanguage: .native,
-              countryStateLanguage: .arabic,
-              dropdownDecoration: BoxDecoration(
-                borderRadius: const .all(.circular(10)),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              disabledDropdownDecoration: .new(
-                borderRadius: const .all(.circular(10)),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              selectedItemStyle: .new(
-                color: Theme.of(context).colorScheme.surface,
-                fontSize: 14,
-              ),
-              searchBarRadius: 20,
-              dropdownHeadingStyle: .new(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 17,
-                fontWeight: .bold,
-              ),
-              dropdownItemStyle: .new(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 14,
-              ),
-              onCountryChanged: (value) {
-                setState(() {
-                  configCubit.writeConfig(country: value);
-                });
+            child: ElevatedButton(
+              onPressed: () async {
+                /* TODO: */
               },
-              onStateChanged: (value) {
-                setState(() {});
-              },
-              onCityChanged: (value) {
-                setState(() {
-                  configCubit.writeConfig(city: value);
-                });
-              },
+              child: Text('read the current location'),
             ),
           ),
         ),
