@@ -1,8 +1,6 @@
 class Config {
-  String? country;
-  String? city;
-  String? oldCountry;
-  String? oldCity;
+  double latitude;
+  double longitude;
 
-  Config({this.country, this.city, this.oldCountry, this.oldCity});
+  Config({required this.latitude, required this.longitude});
 }

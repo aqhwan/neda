@@ -12,10 +12,10 @@ typedef Date = DateTime;
 class PrayerTimesApi {
   late final PrayerTimesApiUrl apiUrl;
   final PrayerTimesTakeMethod takeMethod;
+  final Config config;
 
   PrayerTimesApi({
-    required String country,
-    required String city,
+    required this.config,
     this.takeMethod = PrayerTimesTakeMethod.yearly,
   }) {
     final Date startDate = Date.now();
@@ -36,7 +36,10 @@ class PrayerTimesApi {
         'start': startDate.asStringSeparatedByDash(),
         'end': endDate.asStringSeparatedByDash(),
       },
-      queryParams: {'country': country, 'city': city},
+      queryParams: {
+        'latitude': config.latitude.toString(),
+        'longitude': config.longitude.toString(),
+      },
     );
   }
 
@@ -74,9 +77,9 @@ class PrayerTimesApiUrl {
   final String protocol = 'https';
   final String host = 'api.aladhan.com';
   final String prefix = 'v1';
-  final String path = 'calendarByCity/from/{start}/to/{end}';
+  final String path = 'calendar/from/{start}/to/{end}';
   final List<String>? pathParamsNames = ['start', 'end'];
-  final List<String>? queryParamsNames = ['country', 'city'];
+  final List<String>? queryParamsNames = ['latitude', 'longitude'];
   late final String fullApiUrl;
 
   PrayerTimesApiUrl({

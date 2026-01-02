@@ -43,8 +43,6 @@ class _PlacePicker extends StatefulWidget {
 }
 
 class _PlacePickerState extends State<_PlacePicker> {
-  final ConfigCubit configCubit = ConfigCubit();
-
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
