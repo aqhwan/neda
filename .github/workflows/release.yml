@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -30,10 +31,32 @@ jobs:
     - name: Build Android APK
       run: flutter build apk --release
 
-    # Optional: Upload artifacts for later inspection
-    - name: Upload APK artifact
+    # Upload build artifact for debugging
+    - name: Upload APK as artifact
       uses: actions/upload-artifact@v4
       with:
-        pattern: neda-android-*
-        merge-multiple: true
+        name: app-release-apk
         path: build/app/outputs/flutter-apk/app-release.apk
+
+  release-apk:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
+    
+    steps:
+    - name: Download APK artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: app-release-apk
+
+    - name: Display structure of downloaded files
+      run: ls -la
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: app-release.apk
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
