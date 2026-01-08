@@ -19,16 +19,20 @@ jobs:
     - name: Get version from pubspec.yaml
       id: version
       run: |
-        VERSION=$(grep 'version:' pubspec.yaml | head -1 | awk '{print $2}')
+        VERSION=$(grep 'version:' pubspec.yaml | head -1 | awk '{print $2}' | cut -d'+' -f1)
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
         echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
     
     - name: Create Git Tag
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "github-actions@github.com"
+        git config --local user.name "GitHub Actions"
         git tag ${{ steps.version.outputs.tag }}
-        git push origin ${{ steps.version.outputs.tag }}
+        # Push using PAT token for authentication
+        git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git ${{ steps.version.outputs.tag }}
+    
     
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
