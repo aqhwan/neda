@@ -5,26 +5,49 @@ import 'package:geolocator/geolocator.dart';
 import 'package:neda/lib.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final Config defaultConfig = Config(latitude: 0, longitude: 0);
+final Config defaultConfig = Config(latitude: 0, longitude: 0, method: 0);
 
 class ConfigBloc extends Bloc<ConfigEvent, Config> {
   late final SharedPreferences prefs;
 
-  ConfigBloc() : super(defaultConfig) {
-    _init();
+  get _method => prefs.getInt('method') ?? defaultConfig.method;
 
+  ConfigBloc() : super(defaultConfig) {
     on<ConfigEvent>((event, emit) async {
       switch (event) {
-        case ConfigEvent.update:
-          var position = await _update();
+        case UpdateLocationEvent():
+          if (!await isLocationServiceEnabled()) {
+            throw Exception('Location service is not enabled');
+          }
+
+          await makeSurePermissionIsGranted();
+
+          var position = await _updateLocation();
 
           emit(
-            Config(latitude: position.latitude, longitude: position.longitude),
+            Config(
+              latitude: position.latitude,
+              longitude: position.longitude,
+              method: _method,
+            ),
           );
 
           break;
+        case UpdateMethodEvent():
+          await _updateMethod(event.method);
+          emit(
+            Config(
+              latitude: state.latitude,
+              longitude: state.longitude,
+              method: event.method,
+            ),
+          );
+          break;
       }
     });
+
+    // Initialize after setting up event handlers
+    _init();
   }
 
   Future<bool> isLocationServiceEnabled() async =>
@@ -35,48 +58,58 @@ class ConfigBloc extends Bloc<ConfigEvent, Config> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        throw 'Location permissions are denied';
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.',
-      );
+      throw 'Location permissions are permanently denied, we cannot request permissions.';
     }
   }
 
   //- custom event handlers
 
-  void onUpdate(Function callback) {
-    on<ConfigEvent>((event, _) async {
-      if (event == .update) {
-        callback();
-      }
-    });
-  }
+  // void onUpdate(Function callback) {
+  //   on<ConfigEvent>((event, _) async {
+  //     if (event == .update) {
+  //       callback();
+  //     }
+  //   });
+  // }
 
   Future<bool> openLocationSettings() => Geolocator.openLocationSettings();
 
   Future<void> _init() async {
     prefs = await SharedPreferences.getInstance();
+    final latitude = prefs.getDouble('latitude');
+    final longitude = prefs.getDouble('longitude');
 
-    final latitude = prefs.getDouble('latitude') ?? 0;
-    final longitude = prefs.getDouble('longitude') ?? 0;
-
-    // ignore: invalid_use_of_visible_for_testing_member
-    emit(Config(latitude: latitude, longitude: longitude));
+    // Only emit if we have stored values
+    if (latitude != null && longitude != null) {
+      add(UpdateLocationEvent());
+    }
   }
 
   //- event handlers
-  Future<Position> _update() async {
+  Future<Position> _updateLocation() async {
     var position = await Geolocator.getCurrentPosition();
 
-    prefs.setDouble('latitude', position.latitude);
-    prefs.setDouble('longitude', position.longitude);
+    await prefs.setDouble('latitude', position.latitude);
+    await prefs.setDouble('longitude', position.longitude);
 
     return position;
   }
+
+  Future<void> _updateMethod(int method) async {
+    await prefs.setInt('method', method);
+  }
 }
 
-enum ConfigEvent { update }
+sealed class ConfigEvent {}
+
+final class UpdateLocationEvent extends ConfigEvent {}
+
+final class UpdateMethodEvent extends ConfigEvent {
+  final int method;
+  UpdateMethodEvent(this.method);
+}

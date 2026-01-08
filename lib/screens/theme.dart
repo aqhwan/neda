@@ -88,6 +88,11 @@ class NedaTheme {
       listTileTheme: .new(
         tileColor: surface,
         titleTextStyle: .new(color: primary, fontFamily: fontFamily),
+        subtitleTextStyle: .new(
+          color: font,
+          fontFamily: fontFamily,
+          fontSize: FontSize.medium,
+        ),
         contentPadding: .only(right: 20, left: 20),
       ),
 

@@ -10,6 +10,7 @@ class NedaApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'نداء',
+      locale: const Locale('ar'),
       theme: NedaTheme.of(context).data,
       home: Scaffold(body: NedaRoot()),
     );

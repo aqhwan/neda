@@ -4,21 +4,18 @@ import 'package:neda/modele/salat.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SalatTimesCubit extends Cubit<Salat?> {
-  SalatTimesCubit() : super(null);
+  final SalatRepository salatRepository;
+
+  SalatTimesCubit({required this.salatRepository}) : super(null);
 
   /// fetch the today salat times from the database
-  Future<void> fetchTodaySalatTimeFromDb({
-    required SalatRepository salatRepository,
-  }) async {
+  Future<void> fetchTodaySalatTimeFromDb() async {
     var todaySalatTimes = await salatRepository.getTodayPrayerTimes();
     emit(todaySalatTimes);
   }
 
   /// refetch the salat times from the api and store them in the database
-  Future<void> updateSalatTimesInDbFromApi({
-    required Config config,
-    required SalatRepository salatRepository,
-  }) async {
+  Future<void> updateSalatTimesInDbFromApi({required Config config}) async {
     var api = PrayerTimesApi(config: config);
 
     List<Salat>? salatTimes;
@@ -29,18 +26,24 @@ class SalatTimesCubit extends Cubit<Salat?> {
     }
 
     if (salatTimes != null) {
-      _writeSalatTimesToDb(
-        salatRepository: salatRepository,
-        salatTimes: salatTimes,
-      );
+      _writeSalatTimesToDb(salatTimes: salatTimes);
+    }
+  }
+
+  /// refresh event handler
+  Future<void> refresh({required Config config}) async {
+    // Only update if coordinates are valid (not 0,0)
+    if (config.latitude != 0 && config.longitude != 0) {
+      await updateSalatTimesInDbFromApi(config: config);
+
+      await fetchTodaySalatTimeFromDb();
+    } else {
+      throw Exception('No valid location');
     }
   }
 
   /// store the salat times in the database
-  void _writeSalatTimesToDb({
-    required SalatRepository salatRepository,
-    required List<Salat> salatTimes,
-  }) {
+  void _writeSalatTimesToDb({required List<Salat> salatTimes}) {
     salatRepository.overwriteAll(salatTimes);
   }
 }

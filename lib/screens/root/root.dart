@@ -4,6 +4,7 @@ import 'package:neda/lib.dart';
 import 'package:neda/screens/root/bottom_sheet.dart';
 import 'package:neda/screens/root/clock.dart';
 import 'package:neda/screens/root/time_list.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NedaRoot extends StatelessWidget {
   const NedaRoot({super.key});
@@ -13,11 +14,18 @@ class NedaRoot extends StatelessWidget {
     return SafeArea(
       child: GestureDetector(
         onLongPress: () {
+          var configBloc = BlocProvider.of<ConfigBloc>(context);
+          var salatTimesCubit = BlocProvider.of<SalatTimesCubit>(context);
+
           HapticFeedback.vibrate();
+
           showModalBottomSheet(
             enableDrag: true,
             context: context,
-            builder: (context) => NedaBottomSheet(),
+            builder: (context) => NedaBottomSheet(
+              configBloc: configBloc,
+              salatTimesCubit: salatTimesCubit,
+            ),
           );
         },
         child: Center(
@@ -44,7 +52,7 @@ class NedaRoot extends StatelessWidget {
                       color: Theme.of(context).colorScheme.surfaceContainerHigh,
                       borderRadius: .circular(20),
                     ),
-                    child: Clock(),
+                    child: const Clock(),
                   ),
                 ),
                 Flexible(
