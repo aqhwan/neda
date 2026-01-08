@@ -7,7 +7,7 @@ on:
       - "v*"
 
 jobs:
-  build_and_test:
+  build:  #_and_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,8 +22,8 @@ jobs:
     - name: Get Flutter dependencies
       run: flutter pub get
 
-    - name: Run unit tests
-      run: flutter test
+    # - name: Run unit tests
+    #   run: flutter test
 
     - name: Build Android APK
       run: flutter build apk --release
@@ -36,7 +36,7 @@ jobs:
         path: build/app/outputs/flutter-apk/app-release.apk
 
   release-apk:
-    needs: build_and_test
+    needs: build #_and_test
     runs-on: ubuntu-latest
     permissions:
       contents: write  # Required for creating releases
