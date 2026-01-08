@@ -39,6 +39,7 @@ class PrayerTimesApi {
       queryParams: {
         'latitude': config.latitude.toString(),
         'longitude': config.longitude.toString(),
+        'method': config.method.toString(),
       },
     );
   }
@@ -79,7 +80,7 @@ class PrayerTimesApiUrl {
   final String prefix = 'v1';
   final String path = 'calendar/from/{start}/to/{end}';
   final List<String>? pathParamsNames = ['start', 'end'];
-  final List<String>? queryParamsNames = ['latitude', 'longitude'];
+  final List<String>? queryParamsNames = ['latitude', 'longitude', 'method'];
   late final String fullApiUrl;
 
   PrayerTimesApiUrl({

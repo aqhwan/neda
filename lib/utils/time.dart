@@ -12,14 +12,12 @@ extension TimeAsString on TimeOfDay {
   TimeOfDay operator -(TimeOfDay other) {
     var decreseHour = other.minute > minute;
     var otherHour = decreseHour ? other.hour + 1 : other.hour;
-    if (hour >= otherHour) {
-      return TimeOfDay(
-        hour: hour - otherHour,
-        minute: (minute - other.minute) % 60,
-      );
-    }
+    var thisHour = hour < otherHour ? 24 + hour : hour;
 
-    return TimeOfDay(hour: 0, minute: 0);
+    return TimeOfDay(
+      hour: thisHour - otherHour,
+      minute: (minute - other.minute) % 60,
+    );
   }
 }
 
