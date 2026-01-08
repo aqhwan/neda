@@ -11,6 +11,19 @@ Neda is an free and open source prayer times app for Android, iOS, Linux, Window
 - 📡 23 Prayer times calculation methods
 - 🔌 Works offline, only one time data fetch in 11 months required is required internit connection
 
+## Plan
+- [x] featch prayer times from api.
+- [x] store prayer times in database.
+- [x] show prayer times.
+- [x] support location update via GPS.
+- [x] multi salat time calculation methods support.
+- [ ] notification support.
+- [ ] configurable adhan audio support.
+- [ ] multi language support.
+- [ ] web support.
+- [ ] home screen widget support for android.
+- [ ] multi theme support (maybe).
+
 ## Development And Contributions
 
 We welcome contributions to Neda. The project is written in Dart (v3.10.3 (stable)) and Flutter (v3.38.4 • channel stable)
