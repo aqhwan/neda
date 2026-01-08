@@ -12,6 +12,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for tags
+    
+    - name: Get version from pubspec.yaml
+      id: version
+      run: |
+        VERSION=$(grep 'version:' pubspec.yaml | head -1 | awk '{print $2}')
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
+    
+    - name: Create Git Tag
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag ${{ steps.version.outputs.tag }}
+        git push origin ${{ steps.version.outputs.tag }}
     
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
